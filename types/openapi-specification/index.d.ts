@@ -71,16 +71,12 @@ export type Parameter= RequiredByKeys<{
     explode: boolean
     allowReserved: boolean
     examples: Record<string, Example | Reference>
-}, 'name' | 'in'> &  ({
+}, 'name' | 'in'> & OneOfRequiredKey<{
     content: Content
-    schema?: Schema
-} | {
-    content?: Content
     schema: Schema
-})
+}, 'content'| 'schema'>
 
-
-
+type OneOfRequiredKey<T, P extends keyof T> = P extends string ?  RequiredByKeys<T, P> : never
 export type Schema = {
 }
 export type Content = {
