@@ -49,19 +49,96 @@ export type Server = {
     variables: Record<string, ServerVariable>
 }
 type RequestMethod = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch' | 'trace'
-export type Paths = Record<string, Record<RequestMethod, PathItem>>
+export type Paths = Record<string, PathItem>
 
 type PathItem = {
+    $ref: string
     summary: string
     description: string
     servers: Server[]
-    parameters: Array<Parameter | Reference>
+    parameters: ParameterOrReference[]
+} | Record<RequestMethod, Operation>
+// https://spec.openapis.org/oas/latest.html#style-examples
+type StyleValues = 'matrix' | 'label' | 'form' | 'simple' | 'spaceDelimited' | 'pipeDelimited' | 'deepObject'
+export type Parameter= RequiredByKeys<{
+    name: string
+    in: 'query' |'header' | 'path' | 'cookie'
+    description: string
+    required: boolean
+    deprecated: boolean
+    allowEmptyValue: boolean
+    style: StyleValues
+    explode: boolean
+    allowReserved: boolean
+    examples: Record<string, Example | Reference>
+}, 'name' | 'in'> &  ({
+    content: Content
+    schema?: Schema
+} | {
+    content?: Content
+    schema: Schema
+})
+
+
+
+export type Schema = {
+}
+export type Content = {
 }
 
-export type Parameter = {}
+export type Example = {
+    summary: string
+    description: string
+    value: any
+    externalValue: string
+}
 
-export type Reference = {}
+export type Reference = Partial<{
+    $ref: string
+    summary: string
+    description: string
+}>
 
+export type RefObject =  {
+    $ref: string
+    [key: string]: any
+}
+
+export type ParameterOrReference = Parameter | RefObject | Reference
+
+
+export type Operation = {
+    tags: string[]
+    summary: string
+    description: string
+    externalDocs: ExternalDocumentation
+    operationId: string
+    parameters: Array<Parameter | Reference>
+    requestBody: RequestBody | RefObject | Reference
+    responses: Responses
+    callbacks: Record<string, Callbacks | Reference>
+    deprecated: boolean
+    security: SecurityRequirement[]
+    servers: Server[]
+}
+
+export type SecurityRequirement = Record<string, string[]>
+
+export type RequestBody = {
+
+}
+export type Responses = {
+
+}
+
+export type Callbacks = {
+
+}
+
+export type ExternalDocumentation = {
+    description?: string
+    url: string
+}
 
 export type OpenAPI = {
     openapi: string
