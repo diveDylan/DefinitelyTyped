@@ -21,21 +21,17 @@ export type Info = PartialExcludeKeys<{
     version: string
 }, 'title' | 'version' >
 
-type Contact = Partial<{
+export type Contact = Partial<{
     name: string
     url: string
     email: string
 }>
 // oneOf required: identifier or url
-type License = {
+export type License = OneOfRequiredKey<{
     name: string
     identifier: string
-    url?: string
-} | {
-    name: string
-    identifier?: string
     url: string
-}
+}, 'url' | 'identifier'>
 
 type ServerVariable = PartialExcludeKeys<{
     enum: string[]
@@ -43,21 +39,21 @@ type ServerVariable = PartialExcludeKeys<{
     description: string
 }, 'default'>
 
-export type Server = {
+export type Server = RequiredByKeys<{
     url: string
     description: string
     variables: Record<string, ServerVariable>
-}
+}, 'url'>
 type RequestMethod = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch' | 'trace'
 export type Paths = Record<string, PathItem>
 
-type PathItem = {
+type PathItem = RequiredByKeys<{
     $ref: string
     summary: string
     description: string
     servers: Server[]
     parameters: ParameterOrReference[]
-} | Record<RequestMethod, Operation>
+}, '$ref'> | OneOfRequiredKey<Record<RequestMethod, Operation>, RequestMethod>
 // https://spec.openapis.org/oas/latest.html#style-examples
 type StyleValues = 'matrix' | 'label' | 'form' | 'simple' | 'spaceDelimited' | 'pipeDelimited' | 'deepObject'
 export type Parameter= RequiredByKeys<{
@@ -103,7 +99,7 @@ export type RefObject =  {
 export type ParameterOrReference = Parameter | RefObject | Reference
 
 
-export type Operation = {
+export type Operation = Partial<{
     tags: string[]
     summary: string
     description: string
@@ -116,7 +112,7 @@ export type Operation = {
     deprecated: boolean
     security: SecurityRequirement[]
     servers: Server[]
-}
+}>
 
 export type SecurityRequirement = Record<string, string[]>
 
