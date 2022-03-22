@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "lib": ["es6", "dom"],
+        "lib": ["es6"],
         "noImplicitAny": true,
         "noImplicitThis": true,
         "strictNullChecks": true,
@@ -12,10 +12,8 @@
         "noEmit": true,
         "forceConsistentCasingInFileNames": true,
         "paths": {
-            "@ckeditor/ckeditor5-editor-balloon": ["ckeditor__ckeditor5-editor-balloon/v27"],
-            "@ckeditor/ckeditor5-editor-balloon/*": ["ckeditor__ckeditor5-editor-balloon/v27/*"],
-            "@ckeditor/*": ["ckeditor__*"]
+            "tiny-async-pool": ["tiny-async-pool/v1"]
         }
     },
-    "files": ["index.d.ts", "ckeditor__ckeditor5-editor-balloon-tests.ts"]
+    "files": ["index.d.ts", "tiny-async-pool-tests.ts"]
 }
